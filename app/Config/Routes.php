@@ -1,12 +1,13 @@
-<?php namespace Config;
+<?php
+
+namespace Config;
 
 // Create a new instance of our RouteCollection class.
 $routes = Services::routes();
 
 // Load the system's routing file first, so that the app and ENVIRONMENT
 // can override as needed.
-if (file_exists(SYSTEMPATH . 'Config/Routes.php'))
-{
+if (file_exists(SYSTEMPATH . 'Config/Routes.php')) {
 	require SYSTEMPATH . 'Config/Routes.php';
 }
 
@@ -30,12 +31,30 @@ $routes->setAutoRoute(true);
 
 // We get a performance increase by specifying the default
 // route since we don't have to scan directories.
-$routes->group('dev', ['namespace' => 'Api\Blog'])
+$routes->get('/','HomeController::index');
 
-$routes->get('dev/api', 'HomeController::index');
-$routes->get('dev/api/posts/{post}', 'PostsController::get');
+$routes->group('dev',  function ($routes) {
+	$routes->group('api', ['namespace' => 'App\Controllers\Api'], function ($routes) {
+		$routes->get('/','HomeController::index');
+		
+		
+		$routes->get('posts/(:any)','PostController::getPost');
+		$routes->get('posts/(:any)','PostController::index');
 
-// //post router
+		$routes->get('posts/mostViews/(:any)','PostController::getMostViews/$1');
+		$routes->get('posts/mostRecents/(:any)','PostController::getMostRecent/$1');
+		$routes->get('posts/random','PostController::getRandom');
+
+		// $routes->get('posts','PostController::index');
+		// $routes->get('posts','PostController::index');
+		// $routes->get('posts','PostController::index');
+	});
+
+	$routes->group('auth', ['namespace' => 'App\Controllers\Auth'], function ($routes) {
+	});
+
+});
+
 // Route::get('posts/mostViews/{amount}', [
 //     'as' => 'posts.mostviews',
 //     'uses' => 'PostsController@showMostViews'
@@ -79,6 +98,40 @@ $routes->get('dev/api/posts/{post}', 'PostsController::get');
 
 
 
+// //comments routers
+// Route::post('comments', [
+//     'as' => 'posts.comments.store',
+//     'uses' => 'CommentsController@store'
+// ])->middleware('jwt');
+
+// Route::put('comments/{comment_id}', [
+//     'as' => 'posts.comments.update',
+//     'uses' => 'CommentsController@update'
+// ])->middleware('jwt');
+
+// Route::delete('comments/{comment_id}', [
+//     'as' => 'posts.comments.delete',
+//     'uses' => 'CommentsController@destroy'
+// ])->middleware('jwt');
+
+
+// Route::post('images', [
+//     'as' => 'posts.image.upload',
+//     'uses' => 'ImagesController@uploadImages'
+// ])->middleware('jwt');
+
+// Route::get('imagesget', [
+//     'as' => 'posts.image.upload',
+//     'uses' => 'ImagesController@get'
+// ]);
+
+// Route::delete('images/{image_id}', [
+//     'as' => 'posts.image.delete',
+//     'uses' => 'ImagesController@deleteImages'
+// ])->middleware('jwt');
+
+
+
 /**
  * --------------------------------------------------------------------
  * Additional Routing
@@ -92,7 +145,6 @@ $routes->get('dev/api/posts/{post}', 'PostsController::get');
  * You will have access to the $routes object within that file without
  * needing to reload it.
  */
-if (file_exists(APPPATH . 'Config/' . ENVIRONMENT . '/Routes.php'))
-{
+if (file_exists(APPPATH . 'Config/' . ENVIRONMENT . '/Routes.php')) {
 	require APPPATH . 'Config/' . ENVIRONMENT . '/Routes.php';
 }
