@@ -2,7 +2,7 @@
 
 namespace App\Controllers\Api;
 
-use App\Models\Posts;
+use App\Models\PostModel;
 use CodeIgniter\RESTful\ResourceController;
 
 interface PostControllerInterface
@@ -17,24 +17,24 @@ class PostController extends ResourceController
 
     public function getPost($id)
     {
-        $model = new Posts();
+        $model = new PostModel();
         return $this->respond($model->getPost($id));
     }
     public function storePost($id)
     {
-        $model = new Posts();
+        $model = new PostModel();
         return $this->respond($model->storePost($id));
     }
 
     public function deletePost($id)
     {
-        $model = new Posts();
+        $model = new PostModel();
         return $this->respond($model->deletePost($id));
     }
 
     public function updatePost($id)
     {
-        $model = new Posts();
+        $model = new PostModel();
         $request_content  = $this->request->body->all();
         return $this->respond($model->updatePost($request_content, $id));
     }
@@ -42,31 +42,31 @@ class PostController extends ResourceController
 
     // public function getMostViews($amount)
     // {
-    //     $model = new Posts();
+    //     $model = new PostModel();
     //     return $this->respond($model->getMostViews($amount));
     // }
 
     // public function getMostViews($amount)
     // {
-    //     $model = new Posts();
+    //     $model = new PostModel();
     //     return $this->respond($model->getMostViews($amount));
     // }
 
     public function getMostViews($amount)
     {
-        $model = new Posts();
+        $model = new PostModel();
         return $this->respond($model->getMostViews($amount));
     }
 
     public function getMostRecent($amount)
     {
-        $model = new Posts();
+        $model = new PostModel();
         return $this->respond($model->getMostViews($amount));
     }
 
     public function getRandom()
     {
-        $model = new Posts();
+        $model = new PostModel();
         return $this->respond($model->getRandom());
     }
 }
